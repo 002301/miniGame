@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>miniGame</title>
+  <style>
+    .time{
+      width: 100%;
+      height: 100px;
+      line-height: 100px;
+      text-align: center;
+      font-size: 30px;
+    }
+    button{
+      width: 100%;
+      height: 50px;
+      margin:10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="oneSecond" >
+      <div class="introduction">
+        <p>说明</p>
+        点击按钮，让计时接近一秒
+      </div>
+      <div class="time">00:00</div>
+      <button class="startBtn">Go</button>
+      <button class="stopBtn">Stop</button>
+  </div>
+  <script type="module">
+  import { Game, addZero } from '../src/miniGame.js'
+  // 创建游戏
+  let game = new Game()
+  let times = null
+  // 游戏时间监听
+  game.addEventListener('tick', e => {
+    const deltaTime = ~~(e.detail.deltaTime/10)
+    if(deltaTime < 100) {
+      document.querySelector('.time').innerHTML = `00:${addZero(deltaTime)}`
+    }else{
+      document.querySelector('.time').innerHTML = `${~~(deltaTime/100)}:${addZero(deltaTime%100)}`
+    }
+  })
+  // 游戏结束 用于开发者触发的事件
+  game.addEventListener('stop', e => {
+    console.log('---[ stop ]',e)
+  })
+  // 游戏暂停
+  game.addEventListener('pause', e => {
+    console.log('---[ pause ]',e)
+  })
+  // 游戏结束 自动触发的事件
+  game.addEventListener('over', e => {
+    console.log('---[ over ]',e.detail)
+  })
+  document.querySelector('.startBtn').addEventListener('click', () => {
+    if(game.state == 'play') {
+      game.pause()
+    }else{
+      game.start()
+    }
+  })
+  document.querySelector('.stopBtn').addEventListener('click', () => {
+    game.stop()
+  })
+
+</script>
+</body>
+</html>
