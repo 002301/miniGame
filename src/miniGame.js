@@ -34,18 +34,16 @@ export class Game extends EventTarget {
     this.#elapsedTime = 0
 
     let startTime = null;
-    let lastTime = null;
 
     function gameLoop(timestamp) {
       if (!startTime) {
         startTime = timestamp;
       }
-      lastTime = timestamp - startTime;
       // 在这里更新游戏状态
-      let tickEvent = new CustomEvent("tick", { detail: { deltaTime: _this.lastTime } })
+      let tickEvent = new CustomEvent("tick", { detail: { deltaTime: timestamp - startTime } })
       _this.dispatchEvent(tickEvent)
       // 增加时间
-      this.#elapsedTime += timestamp;
+      _this.#elapsedTime += timestamp;
       if (_this.#state == STATE.PLAY) requestAnimationFrame(gameLoop);
     }
 
