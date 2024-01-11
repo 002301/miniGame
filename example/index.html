@@ -37,6 +37,7 @@
   // 游戏时间监听
   game.addEventListener('tick', e => {
     const deltaTime = ~~(e.detail.deltaTime/10)
+    console.log('tick'+deltaTime)
     if(deltaTime < 100) {
       document.querySelector('.time').innerHTML = `00:${addZero(deltaTime)}`
     }else{
